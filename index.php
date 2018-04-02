@@ -17,9 +17,9 @@
       if ($weatherArray['cod'] == 200) {
         $temp = intval($weatherArray['main']['temp'] - 273);
       
-      $weather = "Currently: ".$weatherArray['weather'][0]['description']." Temp: ".$temp."&deg;C Pressure: 
-                  ".$weatherArray['main']['pressure']." hPa Humidity: ".$weatherArray['main']['humidity']."%
-                   Wind speed: ".$weatherArray['wind']['speed']."m/s \nClouds: ".$weatherArray['clouds']['all']."%";
+      $weather = "Currently: ".$weatherArray['weather'][0]['description']." Temp: ".$temp."&deg;C <br>Pressure: 
+                  ".$weatherArray['main']['pressure']." hPa Humidity: ".$weatherArray['main']['humidity']."% <br>
+                   Wind speed: ".$weatherArray['wind']['speed']."m/s Clouds: ".$weatherArray['clouds']['all']."%";
       }else {
         $error = "Could not find city. Try again";
       }
