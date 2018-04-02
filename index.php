@@ -1,37 +1,30 @@
 <?php
+/* 
+  A weather app which uses an API from openweathermap.org which fetches the current weather of a city
+*/
 
   $weather = "";
   $error = "";
+  $city="";
   if ($_GET["city"]) {
-      $city = str_replace(' ','',$_GET['city']);
+      $city = urlencode($_GET["city"]);
 
-      $file_headers = @get_headers("https://www.weather-forecast.com/locations/".$city."/forecasts/latest");
+            //Fetches the content of the url, in JSON format
+      $urlContent = file_get_contents("http://api.openweathermap.org/data/2.5/weather?q=".$city."&appid=73c38b2fab7e26f2d2ed5c10ddb9a283");
+            // Decoding the JSON format content into an array
+      $weatherArray = json_decode($urlContent, true);      
 
-        if($file_headers[0] == 'HTTP/1.1 404 Not Found') {
-            $error = "That city could not be found";
-        }
-        else {
-          $forecastpage = file_get_contents("https://www.weather-forecast.com/locations/".$city."/forecasts/latest");   
-          
-          $pageArray = explode('</h2>(1&ndash;3 days)</span><p class="b-forecast__table-description-content"><span class="phrase">',
-                          $forecastpage);
+      if ($weatherArray['cod'] == 200) {
+        $temp = intval($weatherArray['main']['temp'] - 273);
+      
+      $weather = "Currently: ".$weatherArray['weather'][0]['description']." Temp: ".$temp."&deg;C Pressure: 
+                  ".$weatherArray['main']['pressure']." hPa Humidity: ".$weatherArray['main']['humidity']."%
+                   Wind speed: ".$weatherArray['wind']['speed']."m/s \nClouds: ".$weatherArray['clouds']['all']."%";
+      }else {
+        $error = "Could not find city. Try again";
+      }
+      
 
-          if (sizeof($pageArray) > 1) {
-            $secondpage = explode('.</span></p></td><td colspan="9">',$pageArray[1]);
-
-            if (sizeof($secondpage) > 1) {
-               $weather =  $secondpage[0]; 
-            } else {
-               $error = "That city could not be found";
-
-            }
-
-          } else{
-            $error = "That city could not be found";
-
-          }   
-              
-        }
   }
 
 ?>
@@ -86,7 +79,7 @@
         <form>
           <div class="form-group">
             <label for="city">Enter name of a city </label>
-            <input type="text" class="form-control" id="city" name ="city" value='<?php echo $_GET["city"] ?>' placeholder="e.g London,Paris">            
+            <input type="text" class="form-control" id="city" name ="city" value='<?php echo $_GET["city"] ?>' placeholder="e.g London,Paris" required>            
           </div>
           
           <button type="submit" class="btn btn-primary">Submit</button>         
