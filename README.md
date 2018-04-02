@@ -1,8 +1,8 @@
 # weather-scrapper
 Practising coding in php by creating a website which tells you the weather in a certain city
 <br>
-A scrapper scripts which picks information from <a>https://www.weather-forecast.com</a>
-<br> However, since it's not an API the HTML content might change and won't work
+This uses an API from <a href="openweathermap.org/api">openweathermap.org</a>
+
 <hr>
 <h3>Languages used:</h3> <br>
   <ul>
